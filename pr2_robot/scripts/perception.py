@@ -252,10 +252,10 @@ def pr2_mover(detected_objects):
     # TODO: Get/Read parameters
     object_list_param = rospy.get_param('/object_list')
     place_pose_list_param = rospy.get_param('/dropbox')
-
-    # TODO: Parse parameters into individual variables
-    
+  
+    # TODO: Loop through the pick list
     for i in range(len(object_list_param)):
+        # Parse parameters into individual variables
         object_label = object_list_param[i]['name']
         object_group = object_list_param[i]['group']
         object_centroid = []
@@ -294,38 +294,41 @@ def pr2_mover(detected_objects):
             pick_pose.position.x = object_centroid[0]
             pick_pose.position.y = object_centroid[1]
             pick_pose.position.z = object_centroid[2]
+            # TODO: Create a list of dictionaries (made with make_yaml_dict()) for later output to yaml format
             yaml_dict = make_yaml_dict(
                 test_scene_num, which_arm, object_name, pick_pose, place_pose)
             dict_list.append(yaml_dict)
 
-            # TODO: Create a list of dictionaries (made with make_yaml_dict()) for later output to yaml format
+
+
+            #     # TODO:
+
+            # # Wait for 'pick_place_routine' service to come up
+            # rospy.wait_for_service('pick_place_routine')
+
+            # try:
+            #     pick_place_routine = rospy.ServiceProxy('pick_place_routine', PickPlace)
+
+            #     # TODO: Insert your message variables to be sent as a service request
+            #     resp = pick_place_routine(test_scene_num, object_name, which_arm, pick_pose, place_pose)
+
+            #     print ("Response: ",resp.success)
+
+            # except rospy.ServiceException, e:
+            #     print "Service call failed: %s"%e
+
+
         else:
-            print("Error, object from the list not found on the table!")
-   
+            print("Object from the list not found on the table!")      
+  
+    # TODO: Output your request parameters into output yaml file
     output_file_name = 'output_' + str(test_scene_num.data) + '.yaml'
     send_to_yaml(output_file_name, dict_list)
 
     # TODO: Rotate PR2 in place to capture side tables for the collision map
 
-    # TODO: Loop through the pick list
+    
 
-    # TODO:
-
-    # Wait for 'pick_place_routine' service to come up
-    # rospy.wait_for_service('pick_place_routine')
-
-    # try:
-    #     pick_place_routine = rospy.ServiceProxy('pick_place_routine', PickPlace)
-
-    #     # TODO: Insert your message variables to be sent as a service request
-    #     resp = pick_place_routine(TEST_SCENE_NUM, OBJECT_NAME, WHICH_ARM, PICK_POSE, PLACE_POSE)
-
-    #     print ("Response: ",resp.success)
-
-    # except rospy.ServiceException, e:
-    #     print "Service call failed: %s"%e
-
-    # TODO: Output your request parameters into output yaml file
 
 
 if __name__ == '__main__':
@@ -360,7 +363,7 @@ if __name__ == '__main__':
 
     # Set test scene
     test_scene_num = Int32()
-    test_scene_num.data = 1
+    test_scene_num.data = 3
 
     # TODO: Spin while node is not shutdown
     while not rospy.is_shutdown():
