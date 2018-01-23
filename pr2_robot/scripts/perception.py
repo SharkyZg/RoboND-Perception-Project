@@ -321,7 +321,7 @@ if __name__ == '__main__':
 
     # Setting test scene
     test_scene_num = Int32()
-    test_scene_num.data = x
+    test_scene_num.data = 1
 
     # Spin while node is not shutdown
     while not rospy.is_shutdown():
